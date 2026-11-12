@@ -101,8 +101,8 @@ def auth_status(request: Request):
 
 
 @app.post("/api/auth/unlock")
-def unlock(body: PinIn, response: Response):
-    if not auth.check_pin(body.pin):
+def unlock(body: PinIn, request: Request, response: Response):
+    if not auth.check_pin(body.pin, request.client.host if request.client else ""):
         raise HTTPException(status_code=403, detail="Wrong PIN (5 misses lock unlocking for 60 s)")
     response.set_cookie(auth.COOKIE, auth.token(), httponly=True, samesite="lax", max_age=60 * 60 * 24 * 30)
     return {"admin": True}
