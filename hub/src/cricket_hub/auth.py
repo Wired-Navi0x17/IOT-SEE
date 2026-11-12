@@ -34,6 +34,10 @@ def check_pin(given: str, client: str = "") -> bool:
     """Constant-time PIN check. 5 wrong tries in a minute from one client lock that client out for 60 s."""
     with _lock:
         t = time.monotonic()
+        for k in [k for k, v in _misses.items() if not v or t - v[-1] >= 60]:
+            del _misses[k]                         # evict stale clients
+        if sum(len(v) for v in _misses.values()) >= 30:
+            return False                           # global budget: many clients guessing at once
         recent = [m for m in _misses.get(client, []) if t - m < 60]
         if len(recent) >= 5:
             _misses[client] = recent
