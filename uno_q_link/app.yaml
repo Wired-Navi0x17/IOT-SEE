@@ -1,0 +1,2 @@
+name: CYD Link
+description: Relays the cricket hub's device WebSocket to the CYD over UART (D0/D1).

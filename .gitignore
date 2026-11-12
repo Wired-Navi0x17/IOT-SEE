@@ -1,0 +1,29 @@
+# --- not part of the build: presentation, video, papers ---
+*.pptx
+*.mp4
+*.pdf
+video/
+video2/
+paper/
+conference-template-a4.docx
+docs/DOC.md
+CLAUDE.md
+DESIGN.md
+
+# --- secrets (copy the *.example files) ---
+.env
+hub/.env
+cricket_scoreboard/secrets.h
+
+# --- build / runtime output ---
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+*.db
+*.db.*
+*-backup-*
+target/
+build/
+.vscode/
+.idea/

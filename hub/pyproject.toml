@@ -1,0 +1,29 @@
+[project]
+name = "cricket-hub"
+version = "0.1.0"
+description = "SEEv2 cricket hub: CricketData poller, scoring engine, simulator, CYD link and dashboard API"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "sqlmodel>=0.0.22",
+  "httpx>=0.27",
+  "zeroconf>=0.132",
+  "python-dotenv>=1.0",
+]
+
+[project.scripts]
+hub = "cricket_hub.main:run"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cricket_hub"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
