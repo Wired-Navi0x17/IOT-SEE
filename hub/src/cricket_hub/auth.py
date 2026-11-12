@@ -4,6 +4,7 @@ import hashlib
 import hmac
 import os
 import secrets
+import time
 
 from fastapi import HTTPException, Request
 
@@ -22,6 +23,21 @@ def _secret() -> str:
 
 def pin() -> str:
     return os.environ.get("HUB_PIN", "4817")
+
+
+_misses: list[float] = []
+
+
+def check_pin(given: str) -> bool:
+    """Constant-time PIN check; 5 wrong tries in a minute lock unlocking for 60 s."""
+    t = time.monotonic()
+    _misses[:] = [m for m in _misses if t - m < 60]
+    if len(_misses) >= 5:
+        return False
+    if hmac.compare_digest(given.encode(), pin().encode()):
+        return True
+    _misses.append(t)
+    return False
 
 
 def token() -> str:

@@ -102,8 +102,8 @@ def auth_status(request: Request):
 
 @app.post("/api/auth/unlock")
 def unlock(body: PinIn, response: Response):
-    if body.pin != auth.pin():
-        raise HTTPException(status_code=403, detail="Wrong PIN")
+    if not auth.check_pin(body.pin):
+        raise HTTPException(status_code=403, detail="Wrong PIN (5 misses lock unlocking for 60 s)")
     response.set_cookie(auth.COOKIE, auth.token(), httponly=True, samesite="lax", max_age=60 * 60 * 24 * 30)
     return {"admin": True}
 
@@ -597,8 +597,9 @@ if STATIC.exists():
 
 @app.get("/{path:path}", include_in_schema=False)
 def spa(path: str):
-    target = STATIC / path
-    if path and target.is_file():
+    root = STATIC.resolve()
+    target = (STATIC / path).resolve()
+    if path and target.is_relative_to(root) and target.is_file():   # no ../ escapes
         return FileResponse(target)
     index = STATIC / "index.html"
     if index.exists():
