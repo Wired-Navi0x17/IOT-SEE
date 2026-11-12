@@ -1,0 +1,21 @@
+[package]
+name = "seev2-cricket-app"
+version = "0.1.0"
+description = "Android app for the SEEv2 Cricket Box: opens the dashboard served by the Arduino UNO Q hub"
+edition = "2021"
+publish = false
+
+[lib]
+name = "seev2_cricket_app_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+
+[profile.release]
+lto = true
+opt-level = "s"
+strip = true
