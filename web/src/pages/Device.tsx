@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowClockwiseIcon, CircleHalfIcon, CrosshairIcon, PowerIcon, SunIcon } from '@phosphor-icons/react'
+import { ArrowClockwiseIcon, CircleHalfIcon, CrosshairIcon, PowerIcon, QrCodeIcon, SunIcon } from '@phosphor-icons/react'
 import { Page, Panel, ErrorRow, Field, SkeletonRows, Stat } from '../components/ui'
 import { Bars, Gauge, Spark } from '../components/charts'
 import { useApi, useRefreshOn } from '../lib/hooks'
@@ -57,18 +57,21 @@ export default function Device() {
   const u = liveUsage ?? usage.data?.current
   const sourceOptions = (matches.data ?? []).filter(m => m.status !== 'scheduled').slice(0, 30)
 
+  const wired = dev?.info?.link === 'wire'
+  // The QR code on the CYD opens this dashboard. On the laptop's localhost that address is useless to a phone.
+  const qrUrl = /^(localhost|127\.)/.test(location.hostname) ? 'http://10.42.0.1:8000/' : `${location.origin}/`
   return (
     <Page title="Device control" sub="The CYD scoreboard and the CricketData link. Commands are acknowledged by the device once applied.">
       {err && <div className="mb-4"><ErrorRow message={err} /></div>}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         <Panel title="CYD scoreboard" className="lg:col-span-7" meta={dev?.info?.board || 'ESP32-2432S028R'}
-               actions={<span className={`label ${dev?.online ? 'text-teal' : 'text-warn'}`}>{dev?.online ? 'Online' : 'Offline'}</span>}>
+               actions={<span className={`label ${dev?.online ? 'text-teal' : 'text-warn'}`}>{dev?.online ? (wired ? 'Online, wired via UNO Q' : 'Online, WiFi') : 'Offline'}</span>}>
           {!dev ? <SkeletonRows rows={2} h={50} /> : (
             <div className="grid gap-5">
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                 <Stat label="Frame rate" value={tm.fps ? `${tm.fps}` : '-'} sub="fps, liquid band" />
                 <Stat label="Free heap" value={tm.heap ? `${(tm.heap / 1024).toFixed(1)}` : '-'} sub={tm.maxblk ? `KB, block ${(tm.maxblk / 1024).toFixed(0)} KB` : 'KB'} />
-                <Stat label="WiFi" value={tm.rssi ?? '-'} sub="dBm" />
+                {wired ? <Stat label="Link" value="UART" sub="115200 baud, via UNO Q" /> : <Stat label="WiFi" value={tm.rssi ?? '-'} sub="dBm" />}
                 <Stat label="Uptime" value={<span className="text-[17px]">{uptime(tm.uptime)}</span>} sub={dev.lastSeen ? `seen ${ago(dev.lastSeen)}` : 'never seen'} />
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -97,7 +100,7 @@ export default function Device() {
           </div>
         </Panel>
 
-        <Panel title="WiFi networks" className="lg:col-span-12" meta={dev?.info?.wifi?.ssid ? `On ${dev.info.wifi.ssid}` : undefined}
+        {!wired && <Panel title="WiFi networks" className="lg:col-span-12" meta={dev?.info?.wifi?.ssid ? `On ${dev.info.wifi.ssid}` : undefined}
                bodyClass="panel-body grid grid-cols-1 gap-6 md:grid-cols-[1fr_1fr]">
           <div className="grid content-start gap-3">
             <p className="text-[13px] text-dim">The CYD remembers up to 5 networks and joins whichever is in range. If none is, it opens its own
@@ -120,7 +123,7 @@ export default function Device() {
             </Field>
             <div><button className="btn btn-primary" disabled={!dev?.online || !!busy}>Save to CYD</button></div>
           </form>
-        </Panel>
+        </Panel>}
 
         <Panel title="Commands" className="lg:col-span-7">
           <div className="grid gap-5">
@@ -137,6 +140,11 @@ export default function Device() {
               <button className="btn" disabled={!!busy} onClick={() => cmd('rotate')}><ArrowClockwiseIcon size={16} weight="light" />Rotate 180</button>
               <button className="btn" disabled={!!busy} onClick={() => cmd('invert')}><CircleHalfIcon size={16} weight="light" />Invert</button>
               <button className="btn btn-danger" disabled={!!busy} onClick={() => { if (confirm('Reboot the CYD?')) cmd('reboot') }}><PowerIcon size={16} weight="light" />Reboot</button>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <button className="btn" disabled={!!busy} onClick={() => cmd('qr', { on: true, url: qrUrl })}><QrCodeIcon size={16} weight="light" />Show QR</button>
+              <button className="btn" disabled={!!busy} onClick={() => cmd('qr', { on: false })}>Hide QR</button>
+              <span className="text-dim text-[13px]">Phones scan it to open <span className="mono">{qrUrl}</span></span>
             </div>
           </div>
         </Panel>

@@ -19,7 +19,7 @@ from .models import CommandLog, DeviceTelemetry, Match, Snapshot, now
 from .simulator import roll, situation_for
 
 log = logging.getLogger("hub")
-FW_COMMANDS = {"brightness", "rotate", "invert", "identify", "reboot", "demo", "ping", "wifi_add", "wifi_forget"}
+FW_COMMANDS = {"brightness", "rotate", "invert", "identify", "reboot", "demo", "ping", "wifi_add", "wifi_forget", "qr"}
 SIM_SPEEDS = {"broadcast": 4.0, "quick": 1.2, "turbo": 0.25}
 
 
@@ -99,6 +99,7 @@ class Hub:
 
     async def set_source(self, src: dict) -> None:
         set_setting("display_source", src)
+        asyncio.create_task(self.command("demo", {"on": False}, log_it=False, timeout=2))   # TEMPORARY exhibition: a dashboard choice ends the CYD demo
         await self.push_display(force=True)
         await self.broadcast("device.status", self.device_status())
 
@@ -201,6 +202,7 @@ class Hub:
             return
         if t == "hello":
             self.device_info = {k: msg.get(k) for k in ("fw", "mac", "ip", "board", "ssid")}
+            self.device_info["link"] = "wire" if msg.get("uno") == "uart" else "wifi"
             await self.command("demo", {"on": False}, log_it=False)   # older firmware: stop its built-in loop
             await self.push_display(force=True)
         elif t == "tap":

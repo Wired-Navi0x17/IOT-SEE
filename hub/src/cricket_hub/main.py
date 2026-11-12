@@ -23,7 +23,7 @@ load_dotenv(ROOT / ".env")
 from . import auth, cricapi, matches, queries  # noqa: E402
 from .db import init_db, session  # noqa: E402
 from .models import CommandLog, DeviceTelemetry, Match, Player, Snapshot, Team, Tournament, TournamentTeam  # noqa: E402
-from .service import hub, summary  # noqa: E402
+from .service import SIM_SPEEDS, hub, summary  # noqa: E402
 
 log = logging.getLogger("hub")
 STATIC = ROOT / "static"
@@ -383,6 +383,8 @@ class StartIn(BaseModel):
     elected: str = "bat"
     xi_a: Optional[list[int]] = None
     xi_b: Optional[list[int]] = None
+    bowlers_a: Optional[list[int]] = None
+    bowlers_b: Optional[list[int]] = None
 
 
 @app.post("/api/matches/{mid}/start", dependencies=[admin])
@@ -486,19 +488,21 @@ class SpeedIn(BaseModel):
 
 
 @app.post("/api/sim/{mid}/speed", dependencies=[admin])
-def sim_speed(mid: int, body: SpeedIn):
+async def sim_speed(mid: int, body: SpeedIn):
+    if body.speed not in SIM_SPEEDS:
+        raise HTTPException(400, f"speed must be one of {', '.join(SIM_SPEEDS)}")
     hub.sim_speed[mid] = body.speed
     return {"speed": body.speed}
 
 
 @app.post("/api/sim/{mid}/pause", dependencies=[admin])
-def sim_pause(mid: int):
+async def sim_pause(mid: int):  # async: runs on the loop that owns the sim task
     hub.stop_sim(mid)
     return {"running": False}
 
 
 @app.post("/api/sim/{mid}/resume", dependencies=[admin])
-def sim_resume(mid: int):
+async def sim_resume(mid: int):  # async: create_task needs the running loop
     hub.start_sim(mid, hub.sim_speed.get(mid, "quick"))
     return {"running": True}
 

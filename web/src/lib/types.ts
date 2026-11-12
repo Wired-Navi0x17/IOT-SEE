@@ -52,7 +52,7 @@ export type Activity = { id: number; ts: string; kind: string; text: string }
 export type Usage = { hitsToday: number; hitsLimit: number; day: string; lastCall: string | null; ok: boolean; detail?: string; configured: boolean }
 export type Telemetry = { fps?: number; heap?: number; maxblk?: number; rssi?: number; uptime?: number; brightness?: number; showing?: string; rot?: number; ts?: number }
 export type DeviceStatus = {
-  online: boolean; info: { fw?: string; mac?: string; ip?: string; board?: string; ssid?: string; wifi?: { ssid?: string; ip?: string; rssi?: number; saved?: string[] } }; lastSeen: number | null
+  online: boolean; info: { link?: 'wire' | 'wifi'; fw?: string; mac?: string; ip?: string; board?: string; ssid?: string; wifi?: { ssid?: string; ip?: string; rssi?: number; saved?: string[] } }; lastSeen: number | null
   telemetry: Telemetry; source: { kind: 'live' | 'sim' | 'match'; match_id?: number }
 }
 export type CommandRow = { id: number; ts: string; name: string; args: Record<string, unknown>; status: string; detail: string; acked_at: string | null }
