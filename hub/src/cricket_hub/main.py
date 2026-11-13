@@ -48,7 +48,7 @@ async def advertise(port: int):
         from zeroconf import IPVersion, ServiceInfo
         from zeroconf.asyncio import AsyncZeroconf
         ip = lan_ip()
-        info = ServiceInfo("_cricket._tcp.local.", "SEEv2 Cricket Hub._cricket._tcp.local.",
+        info = ServiceInfo("_cricket._tcp.local.", "UCIS Cricket Hub._cricket._tcp.local.",
                            addresses=[socket.inet_aton(ip)], port=port, server="cricket-hub.local.",
                            properties={"path": "/ws/device"})
         zc = AsyncZeroconf(ip_version=IPVersion.V4Only)
@@ -82,7 +82,7 @@ async def lifespan(app: FastAPI):
         await zc.async_close()
 
 
-app = FastAPI(title="SEEv2 Cricket Hub", lifespan=lifespan)
+app = FastAPI(title="UCIS Cricket Hub", lifespan=lifespan)
 admin = Depends(auth.require_admin)
 
 

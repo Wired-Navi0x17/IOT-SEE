@@ -72,7 +72,7 @@ const char* CSS =
   "li{padding:6px 0;border-bottom:1px solid #26303A;list-style:none}ul{padding:0}a{color:#4DB6C4}";
 
 void page() {
-  String h = "<!doctype html><meta name=viewport content='width=device-width,initial-scale=1'><title>SEEv2 CYD WiFi</title><style>";
+  String h = "<!doctype html><meta name=viewport content='width=device-width,initial-scale=1'><title>UCIS CYD WiFi</title><style>";
   h += CSS; h += "</style><h1>Scoreboard WiFi</h1><p>Pick the network the laptop hub is on (your phone hotspot works). ";
   h += "The CYD remembers up to 5 and joins whichever is in range.</p><form method=post action=/save>";
   h += "<label>Network</label><select name=pick onchange=\"document.getElementById('s').value=this.value\"><option value=''>Choose a nearby network</option>";

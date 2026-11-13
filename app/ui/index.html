@@ -39,7 +39,7 @@
 <body>
 <main>
   <div class="wrap">
-    <span class="label">SEEv2 Cricket Box</span>
+    <span class="label">UCIS Cricket Box</span>
     <h1>Connect to the hub</h1>
     <p class="sub">The dashboard runs on the Arduino UNO Q. Join its WiFi, then connect.</p>
     <form class="panel" id="f" autocomplete="off">
@@ -51,7 +51,7 @@
     </form>
     <ul class="steps">
       <li><b>1.</b> Power the UNO Q and wait about a minute for it to boot.</li>
-      <li><b>2.</b> Join the WiFi network <b>SEEv2-Cricket</b>.</li>
+      <li><b>2.</b> Join the WiFi network <b>UCIS-Cricket</b>.</li>
       <li><b>3.</b> Tap Connect. Use the phone's back button to return here.</li>
     </ul>
   </div>
@@ -87,7 +87,7 @@
     const ok = await reachable(origin);
     go.disabled = false;
     if (!ok) {
-      say(auto ? 'Hub not found. Check you are on the SEEv2-Cricket WiFi, then tap Connect.'
+      say(auto ? 'Hub not found. Check you are on the UCIS-Cricket WiFi, then tap Connect.'
                : 'No answer from ' + origin.replace('http://', '') + '. Check the WiFi network and the address.', 'err');
       return;
     }

@@ -5,6 +5,7 @@
 #include "palette.h"
 #include "fonts.h"
 #include "winprob.h"
+#include "device_cmd.h"
 #include <time.h>
 #include <string.h>
 #include <stdio.h>
@@ -232,8 +233,8 @@ void uiBegin(LGFX* lcd) {
 
 void uiDrawHeader(const MatchState& s, bool wifiOk, const char* linkNote) {
   clear(H_HDR);
-  cv.fillCircle(8, 10, 3, s.live ? COL_LIVE : COL_DIM);
-  const char* tag = s.sim ? (s.ended ? "RESULT" : "SIM") : s.live ? "LIVE" : (s.ended ? "RESULT" : "IDLE");
+  cv.fillCircle(8, 10, 3, (s.live && !s.sim && !g_demoShow) ? COL_LIVE : COL_DIM);
+  const char* tag = g_demoShow ? "DEMO" : s.sim ? (s.ended ? "RESULT" : "SIM") : s.live ? "LIVE" : (s.ended ? "RESULT" : "IDLE");
   txt(tag, 16, 10, &ft::name, COL_TXT, textdatum_t::middle_left);
   int x = 16 + tw(tag, &ft::name) + 10;
   char ser[48];

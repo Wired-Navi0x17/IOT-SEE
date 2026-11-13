@@ -1,4 +1,4 @@
-# SEEv2 Cricket Box
+# UCIS Cricket Box
 
 An IPL scoreboard box. An **Arduino UNO Q** runs everything: the hub (FastAPI + SQLite), the
 match simulator and the web dashboard. A **CYD** (ESP32-2432S028R, 2.8" touch TFT) is the

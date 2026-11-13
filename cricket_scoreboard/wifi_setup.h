@@ -2,8 +2,8 @@
 #include <stdint.h>
 // Multi-network WiFi with a captive setup portal.
 // Saved networks live in NVS (up to 5). If none is in range, the CYD opens its own
-// access point "SEEv2-CYD" with a setup page at 192.168.4.1 (QR code on screen).
-#define WIFI_AP_NAME "SEEv2-CYD"
+// access point "UCIS-CYD" with a setup page at 192.168.4.1 (QR code on screen).
+#define WIFI_AP_NAME "UCIS-CYD"
 #define WIFI_AP_PASS "scoreboard"
 #define WIFI_MAX_SAVED 5
 

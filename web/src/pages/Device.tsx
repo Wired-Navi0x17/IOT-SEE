@@ -104,7 +104,7 @@ export default function Device() {
                bodyClass="panel-body grid grid-cols-1 gap-6 md:grid-cols-[1fr_1fr]">
           <div className="grid content-start gap-3">
             <p className="text-[13px] text-dim">The CYD remembers up to 5 networks and joins whichever is in range. If none is, it opens its own
-              hotspot <span className="num text-ink">SEEv2-CYD</span> (password <span className="num text-ink">scoreboard</span>) and shows a QR code; the setup page is at
+              hotspot <span className="num text-ink">UCIS-CYD</span> (password <span className="num text-ink">scoreboard</span>) and shows a QR code; the setup page is at
               <span className="num text-ink"> 192.168.4.1</span>. The laptop must be on the same network. The CYD finds it by its broadcast beacon.</p>
             <table className="table"><tbody>
               {(dev?.info?.wifi?.saved ?? []).map(n => (

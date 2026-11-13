@@ -49,7 +49,7 @@ function StatusStrip() {
   return (
     <div className="sticky top-0 z-20 flex h-11 items-center justify-between gap-3 border-b border-rule bg-charcoal/95 px-4 backdrop-blur-none md:px-6">
       <div className="flex min-w-0 items-center gap-3 sm:gap-4">
-        <span className="flex items-center gap-2 text-[13px] font-semibold tracking-tight md:hidden">SEEv2</span>
+        <span className="flex items-center gap-2 text-[13px] font-semibold tracking-tight md:hidden">UCIS</span>
         <span className="flex items-center gap-2" title="Dashboard link to hub">
           <span className={`dot ${connected ? 'bg-teal' : 'bg-wicket'}`} />
           <span className="label hidden sm:inline">{connected ? 'Hub' : 'Hub offline'}</span><span className="label sm:hidden">Hub</span>
@@ -91,7 +91,7 @@ export function Shell({ children }: { children: ReactNode }) {
       <aside className="sticky top-0 hidden h-[100dvh] flex-col border-r border-rule bg-charcoal md:flex">
         <div className="flex h-11 items-center gap-2 border-b border-rule px-4">
           <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden><path d="M3 18c5-6 9 4 13-2" stroke="#A974E8" strokeWidth="2.5" fill="none" /><path d="M16 16c3 4 8-4 13 0" stroke="#38C9B4" strokeWidth="2.5" fill="none" /><path d="M16 5v22" stroke="#4DB6C4" strokeWidth="1.5" /></svg>
-          <span className="hidden text-[13px] font-semibold tracking-tight lg:inline">SEEv2 Control Room</span>
+          <span className="hidden text-[13px] font-semibold tracking-tight lg:inline">UCIS Control Room</span>
         </div>
         <nav className="flex flex-1 flex-col py-2" aria-label="Main">{TABS.map(t => <RailLink key={t.to} t={t} />)}</nav>
         <div className="hidden border-t border-rule p-4 text-xs text-dim lg:block">Stage 1: laptop hub. Stage 2: Arduino UNO Q.</div>

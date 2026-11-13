@@ -4,7 +4,7 @@ A Tauri 2 shell for Android. It opens a small connect screen (`ui/index.html`), 
 the Arduino UNO Q answers, and then loads the dashboard the hub serves. The phone therefore always has
 the same controls as the web dashboard, and updating the hub updates the app.
 
-Default hub address: `10.42.0.1:8000` (the UNO Q hotspot `SEEv2-Cricket`). The last address that worked
+Default hub address: `10.42.0.1:8000` (the UNO Q hotspot `UCIS-Cricket`). The last address that worked
 is remembered. The phone's back button returns to the connect screen.
 
 ## Build

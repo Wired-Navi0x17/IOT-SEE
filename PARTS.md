@@ -1,4 +1,4 @@
-# SEEv2 Parts and Wiring
+# UCIS Parts and Wiring
 
 ## Parts on hand
 | Part | Detail | Used for |

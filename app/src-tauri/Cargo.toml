@@ -1,7 +1,7 @@
 [package]
 name = "seev2-cricket-app"
 version = "0.1.0"
-description = "Android app for the SEEv2 Cricket Box: opens the dashboard served by the Arduino UNO Q hub"
+description = "Android app for the UCIS Cricket Box: opens the dashboard served by the Arduino UNO Q hub"
 edition = "2021"
 publish = false
 
