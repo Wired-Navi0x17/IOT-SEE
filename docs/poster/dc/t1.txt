@@ -1,0 +1,3 @@
+file.new {"intent":"print","units":"points","width":1080,"height":1920,"pages":1,"facingPages":false,"margins":0,"title":"UCIS poster test"}
+frame.create {"rect":[60,60,600,200],"content":"text","text":"Hello UCIS"}
+document.inspect {}
