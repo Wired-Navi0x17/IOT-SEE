@@ -26,11 +26,11 @@ TEAMS: dict[str, tuple[str, str, str, tuple[str, ...]]] = {
     "SRH": ("Sunrisers Hyderabad", "#F7752A", "#B8BEC4", ()),
 }
 # National sides (not IPL): label colour, then a deep / bright / hot ramp for the CYD beam. The beam mixes
-# jersey colours: India is navy -> blue -> orange trim; New Zealand's black is lifted to steel -> silver
-# -> white so it still reads on the dark screen. Beam-only; the IPL table above stays the single source.
+# jersey colours: India is navy -> blue -> orange trim; New Zealand is the navy-black kit with the teal panel, sampled from the 2026 shirt:
+# near-black navy -> teal -> pale aqua. Beam-only; the IPL table above stays the single source.
 JERSEYS: dict[str, tuple[str, tuple[str, str, str]]] = {
     "india": ("#2F7BF0", ("#0B2A6B", "#2F7BF0", "#FFB866")),
-    "newzealand": ("#C7CED8", ("#2B323F", "#AEB7C4", "#FFFFFF")),
+    "newzealand": ("#3FA8C2", ("#1B2433", "#3FA8C2", "#B4EAF4")),
 }
 JERSEY_ALIASES = {"ind": "india", "nz": "newzealand", "blackcaps": "newzealand", "nzl": "newzealand"}
 
