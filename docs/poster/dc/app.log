@@ -1,9 +1,0 @@
-2026-11-13T06:24:55.445Z INFO  [main] designcraft: DesignCraft 0.20.1, log file /home/l41n-pr0t0/.config/designcraft/logs/designcraft.log
-2026-11-13T06:24:55.447Z INFO  [main] designcraft::gpu::backend: graphics: Vulkan (nothing has failed before; set WGPU_BACKEND to choose another)
-2026-11-13T06:24:55.447Z INFO  [main] designcraft: display GPUs (PCI vendor:device): 8086:a788 (primary)
-2026-11-13T06:24:55.673Z INFO  [main] designcraft::gpu: software renderers passed over while another backend is left to try
-2026-11-13T06:24:55.673Z INFO  [main] designcraft::gpu: graphics adapters: Intel(R) Graphics (RPL-S) (Vulkan, IntegratedGpu, Vulkan:8086:a788, drives the primary display); NVIDIA GeForce RTX 4090 Laptop GPU (Vulkan, DiscreteGpu, Vulkan:10de:2757); llvmpipe (LLVM 21.1.8, 256 bits) (Vulkan, Cpu, Vulkan:10005:0000); Mesa Intel(R) Graphics (RPL-S) (Gl, IntegratedGpu, Gl:8086:0000)
-2026-11-13T06:24:55.673Z INFO  [main] designcraft::gpu: drawing on Intel(R) Graphics (RPL-S) (Vulkan, IntegratedGpu): it drives the primary display
-2026-11-13T06:24:55.705Z INFO  [main] designcraft: graphics: Intel(R) Graphics (RPL-S) on Vulkan (IntegratedGpu; driver Intel open-source Mesa driver Mesa 26.1.8; power preference None)
-2026-11-13T06:24:55.705Z INFO  [main] designcraft: graphics: largest texture side 16384, largest buffer 2047 MiB
-designcraft: control server listening on 127.0.0.1:47815

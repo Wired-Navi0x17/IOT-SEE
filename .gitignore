@@ -27,3 +27,6 @@ target/
 build/
 .vscode/
 .idea/
+docs/poster/dc/app.log
+docs/poster/dc/t.png
+docs/poster/dc/t1.txt
