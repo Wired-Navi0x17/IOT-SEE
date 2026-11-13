@@ -15,8 +15,10 @@ from .models import ApiUsage, Match, now
 from .winprob import par_score, projected_total, win_prob_batting
 
 log = logging.getLogger("cricapi")
-URL = "https://api.cricapi.com/v1/currentMatches"
-POLL_LIVE, POLL_IDLE = 90, 600
+BASE = os.environ.get("CRICAPI_BASE", "https://api.cricapi.com").rstrip("/")  # tools/api_relay.py over USB
+URL = f"{BASE}/v1/currentMatches"
+INFO_URL = f"{BASE}/v1/match_info"
+POLL_LIVE, POLL_IDLE = 150, 900   # free plan: 100 hits/day; 150 s covers a whole ODI innings
 
 
 def api_key() -> str:
@@ -62,8 +64,13 @@ def _balls(o) -> int:
 def normalise(m: dict, prev: dict | None) -> dict:
     teams = m.get("teams") or ["Team A", "Team B"]
     t0, t1 = teams[0], teams[1] if len(teams) > 1 else "Team B"
-    mt = (m.get("matchType") or "t20").lower()
-    total = 300 if mt == "odi" else (0 if mt == "test" else 120)
+    mt = (m.get("matchType") or "").lower()
+    if not mt:  # CricketData leaves matchType empty for some series: infer it from the name and overs bowled
+        name = (m.get("name") or "").lower()
+        most = max([float(x.get("o", 0) or 0) for x in (m.get("score") or [])] + [0])
+        mt = ("test" if "test" in name or most > 50 else "odi" if "odi" in name or most > 20
+              else "t10" if "t10" in name else "t20")
+    total = 300 if mt == "odi" else (0 if mt == "test" else 60 if mt == "t10" else 120)
     score = m.get("score") or []
     last = score[-1] if score else {}
     inning = last.get("inning", "")
@@ -116,10 +123,9 @@ def normalise(m: dict, prev: dict | None) -> dict:
     return st
 
 
-async def poll_once(client: httpx.AsyncClient) -> list[int]:
-    """Fetch currentMatches, upsert api matches. Returns ids of matches whose state changed."""
-    key = api_key()
-    r = await client.get(URL, params={"apikey": key, "offset": 0}, timeout=20)
+async def _call(client: httpx.AsyncClient, url: str, **params) -> dict | None:
+    """One API request, logged against the daily budget. None when CricketData refuses it."""
+    r = await client.get(url, params={"apikey": api_key(), **params}, timeout=20)
     data = r.json()
     info = data.get("info") or {}
     ok = data.get("status") == "success"
@@ -130,10 +136,38 @@ async def poll_once(client: httpx.AsyncClient) -> list[int]:
         s.commit()
     if not ok:
         log_activity("api", f"CricketData refused the request: {data.get('reason', 'unknown')}")
-        return []
+        return None
+    return data
+
+
+async def poll_once(client: httpx.AsyncClient) -> list[int]:
+    """Fetch currentMatches, upsert api matches. Returns ids of matches whose state changed."""
+    # A match we already follow costs one hit (match_info); finding matches costs one hit per page of 25.
+    with session() as s:
+        live = s.exec(select(Match).where(Match.source == "api", Match.status == "live")).all()
+    records: list[dict] = []
+    if live:
+        for row in live[:2]:
+            data = await _call(client, INFO_URL, id=row.api_id)
+            if data is None:
+                return []
+            if isinstance(data.get("data"), dict):
+                records.append(data["data"])
+    else:
+        offset = 0
+        while True:
+            data = await _call(client, URL, offset=offset)
+            if data is None:
+                return []
+            page = data.get("data") or []
+            records += page
+            offset += len(page)
+            total = int((data.get("info") or {}).get("totalRows", 0) or 0)
+            if not page or offset >= total or offset >= 100:
+                break
     changed = []
     with session() as s:
-        for m in data.get("data") or []:
+        for m in records:
             api_id = m.get("id")
             if not api_id:
                 continue

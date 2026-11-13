@@ -129,7 +129,7 @@ class Hub:
             nxt = s.exec(select(Match).where(Match.status == "scheduled", Match.source.in_(["api", "local"]),
                                              Match.scheduled_at.is_not(None))
                          .order_by(Match.scheduled_at)).first()
-        msg = "No live IPL match" if ipl.live_scope() == "ipl" else "No live match"
+        msg = "No live IPL match" if ipl.live_scope().lower() == "ipl" else "No live match"
         if nxt is not None:
             msg += f". Next: {nxt.team_a_short} v {nxt.team_b_short} {nxt.scheduled_at:%d %b %H:%M}"
         return None, msg

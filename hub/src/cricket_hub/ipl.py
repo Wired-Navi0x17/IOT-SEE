@@ -67,10 +67,17 @@ def pair_colors(a: str | None, b: str | None) -> tuple[str, str]:
 
 
 def live_scope() -> str:
-    """LIVE_SCOPE=ipl (default) keeps Screen 1 to IPL games; LIVE_SCOPE=all also shows internationals such as IND v NZ."""
+    """LIVE_SCOPE: "ipl" (default) = IPL games only; "all" = every match; or team names, e.g. "India,New Zealand",
+    = IPL games plus any match one of those teams plays."""
     import os
-    return "all" if os.environ.get("LIVE_SCOPE", "ipl").strip().lower() == "all" else "ipl"
+    return os.environ.get("LIVE_SCOPE", "ipl").strip() or "ipl"
 
 
 def in_scope(*names: str | None) -> bool:
-    return live_scope() == "all" or all(is_ipl(n) for n in names)
+    scope = live_scope()
+    if scope.lower() == "all" or all(is_ipl(n) for n in names):
+        return True
+    if scope.lower() == "ipl":
+        return False
+    wanted = {t.strip().lower() for t in scope.split(",") if t.strip()}
+    return any((n or "").strip().lower() in wanted for n in names)
