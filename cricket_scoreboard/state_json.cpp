@@ -15,6 +15,19 @@ static MatchEvent evFrom(const char* e) {
   return MatchEvent::None;
 }
 
+// "deep,bright,hot" as three hex colours; anything else leaves the ramp zero (= derive from the team colour).
+static void parseRamp(const char* s, uint32_t out[3]) {
+  out[0] = out[1] = out[2] = 0;
+  uint32_t v[3]; char* e = nullptr;
+  for (int i = 0; i < 3; i++) {
+    if (!*s) return;
+    v[i] = strtoul(s, &e, 16);
+    if (e == s) return;
+    s = e; if (i < 2) { if (*s != ',') return; s++; }
+  }
+  for (int i = 0; i < 3; i++) out[i] = v[i];
+}
+
 void parseStateJson(JsonObjectConst o, MatchState& out) {
   MatchState n{};
   copyStr(n.series, sizeof n.series, o["series"]);
@@ -22,6 +35,7 @@ void parseStateJson(JsonObjectConst o, MatchState& out) {
   copyStr(n.teamA, sizeof n.teamA, o["a"]);
   copyStr(n.teamB, sizeof n.teamB, o["b"]);
   n.colA = strtoul(o["ca"] | "0", nullptr, 16); n.colB = strtoul(o["cb"] | "0", nullptr, 16);
+  parseRamp(o["ka"] | "", n.rampA); parseRamp(o["kb"] | "", n.rampB);
   n.battingIsA = o["batA"] | true;
   n.innings = o["inn"] | 1;
   n.runs = o["r"] | 0; n.wkts = o["w"] | 0; n.balls = o["bl"] | 0;

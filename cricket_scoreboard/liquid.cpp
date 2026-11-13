@@ -72,8 +72,12 @@ uint32_t scaleCol(uint32_t c, float k, float toWhite) {
 
 // deep / bright / hot ramps from the current team colours
 void rebuildLuts() {
-  buildLut(lutA, scaleCol(COL_A, 0.45f, 0), COL_A, scaleCol(COL_A, 1, 0.85f));
-  buildLut(lutB, scaleCol(COL_B, 0.45f, 0), COL_B, scaleCol(COL_B, 1, 0.85f));
+  auto ramp = [](uint8_t lut[3][256], uint32_t col, const uint32_t k[3]) {
+    if (k[0] | k[1] | k[2]) buildLut(lut, k[0], k[1], k[2]);          // multi-colour jersey ramp from the hub
+    else buildLut(lut, scaleCol(col, 0.45f, 0), col, scaleCol(col, 1, 0.85f));
+  };
+  ramp(lutA, COL_A, RAMP_A);
+  ramp(lutB, COL_B, RAMP_B);
 }
 
 void drawPill(int bx) {

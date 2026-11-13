@@ -10,6 +10,7 @@ volatile bool  g_inverted = false;
 volatile bool  g_qrShow = false;
 char           g_qrUrl[96] = "http://10.42.0.1:8000/play";
 volatile bool  g_tapPending = false;
+volatile bool  g_demoShow = false;
 
 void cmdInit() {
   qCmd = xQueueCreate(8, sizeof(DeviceCmd));

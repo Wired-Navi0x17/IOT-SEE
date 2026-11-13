@@ -14,7 +14,12 @@
 
 #define HUB_MDNS_NAME "cricket-hub"   // resolved as cricket-hub.local
 #define HUB_PORT      8000
-#define FW_VERSION    "1.2.0"
+#define FW_VERSION    "1.2.1-expo"
+
+// TEMPORARY (exhibition, 2026-11-13): a tap or long press on the CYD toggles the built-in
+// demo scoreboard (simulated chase) on top of the hub feed. Any "Show on CYD" / screen change
+// from the dashboard switches the demo off again. Set to 0 after the exhibition.
+#define EXHIBITION_DEMO 1
 
 // 1 or 3 = landscape. Flip if the picture is upside down.
 #define SCREEN_ROTATION 1

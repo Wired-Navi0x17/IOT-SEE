@@ -25,6 +25,29 @@ TEAMS: dict[str, tuple[str, str, str, tuple[str, ...]]] = {
     "RCB": ("Royal Challengers Bengaluru", "#D9262C", "#D4AF37", ("Royal Challengers Bangalore",)),
     "SRH": ("Sunrisers Hyderabad", "#F7752A", "#B8BEC4", ()),
 }
+# National sides (not IPL): label colour, then a deep / bright / hot ramp for the CYD beam. The beam mixes
+# jersey colours: India is navy -> blue -> orange trim; New Zealand's black is lifted to steel -> silver
+# -> white so it still reads on the dark screen. Beam-only; the IPL table above stays the single source.
+JERSEYS: dict[str, tuple[str, tuple[str, str, str]]] = {
+    "india": ("#2F7BF0", ("#0B2A6B", "#2F7BF0", "#FFB866")),
+    "newzealand": ("#C7CED8", ("#2B323F", "#AEB7C4", "#FFFFFF")),
+}
+JERSEY_ALIASES = {"ind": "india", "nz": "newzealand", "blackcaps": "newzealand", "nzl": "newzealand"}
+
+
+def jersey(name: str | None):
+    k = re.sub(r"[^a-z]", "", (name or "").lower())
+    return JERSEYS.get(JERSEY_ALIASES.get(k, k))
+
+
+def ramps(a: str | None, b: str | None) -> tuple[str, str]:
+    """"deep,bright,hot" hex (no #) per team for the CYD beam; "" = derive from the single colour."""
+    def one(n):
+        j = jersey(n)
+        return ",".join(c[1:] for c in j[1]) if j else ""
+    return one(a), one(b)
+
+
 FALLBACK_A, FALLBACK_B = "#A974E8", "#38C9B4"   # non-IPL or unknown teams
 CLASH = 150.0                                      # redmean distance below this = too alike
 
@@ -57,7 +80,10 @@ def distance(c1: str, c2: str) -> float:
 def pair_colors(a: str | None, b: str | None) -> tuple[str, str]:
     """Display colours for Team A and Team B of one match."""
     ca, cb = code(a), code(b)
-    col_a = TEAMS[ca][1] if ca else FALLBACK_A
+    ja, jb = jersey(a), jersey(b)
+    col_a = TEAMS[ca][1] if ca else (ja[0] if ja else FALLBACK_A)
+    if jb:
+        return col_a, jb[0]
     if not cb:
         return col_a, FALLBACK_B if distance(col_a, FALLBACK_B) >= CLASH else FALLBACK_A
     prim, alt = TEAMS[cb][1], TEAMS[cb][2]

@@ -18,4 +18,5 @@ extern volatile int   g_rotation;
 extern volatile bool  g_inverted;
 extern volatile bool  g_qrShow;        // QR join screen is up
 extern char           g_qrUrl[96];     // what the QR encodes (set by the hub, default below)
+extern volatile bool  g_demoShow;      // TEMPORARY exhibition demo scoreboard is up
 extern volatile bool  g_tapPending;    // display loop -> network task: a short tap happened

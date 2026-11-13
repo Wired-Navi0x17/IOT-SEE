@@ -65,4 +65,14 @@ bool teamColorsApply(const char* a, const char* b) {
   return ch;
 }
 
+uint32_t RAMP_A[3] = {0, 0, 0}, RAMP_B[3] = {0, 0, 0};
+void teamRampsSet(const uint32_t a[3], const uint32_t b[3]) {
+  uint32_t na[3] = {0, 0, 0}, nb[3] = {0, 0, 0};
+  if (a) for (int i = 0; i < 3; i++) na[i] = a[i];
+  if (b) for (int i = 0; i < 3; i++) nb[i] = b[i];
+  if (memcmp(na, RAMP_A, sizeof na) || memcmp(nb, RAMP_B, sizeof nb)) {
+    memcpy(RAMP_A, na, sizeof na); memcpy(RAMP_B, nb, sizeof nb); dirty = true;
+  }
+}
+
 bool teamColorsTake() { bool d = dirty; dirty = false; return d; }

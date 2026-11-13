@@ -35,7 +35,7 @@ void sendTelemetry() {
   JsonDocument d;
   d["t"] = "tm"; d["fps"] = roundf(g_fps * 10) / 10; d["heap"] = ESP.getFreeHeap(); d["maxblk"] = ESP.getMaxAllocHeap();
   d["uptime"] = millis() / 1000; d["brightness"] = g_brightness; d["rot"] = g_rotation;
-  d["showing"] = showing;
+  d["showing"] = g_demoShow ? "DEMO" : showing;
   sendJson(d);
 }
 
@@ -52,7 +52,7 @@ void onLine(const char* s, size_t n) {
   JsonObjectConst a = d["args"];
   if (!strcmp(name, "ping")) { ack(id, true, "pong"); return; }
   if (!strcmp(name, "hello")) { sendHello(); ack(id, true, "hello"); return; }
-  if (!strcmp(name, "demo")) { ack(id, true, "no demo: hub data only"); return; }   // legacy command
+  if (!strcmp(name, "demo")) { g_demoShow = a["on"] | false; ack(id, true, g_demoShow ? "demo on" : "demo off"); return; }
   DeviceCmd c{Cmd::Ping, 0, id};
   if (!cmdFromJson(name, a, c)) { ack(id, false, "unknown command"); return; }
   if (!cmdPush(c)) ack(id, false, "queue full");
@@ -87,6 +87,15 @@ uint32_t feedPoll(MatchState& s, bool& changed) {
     g_tapPending = false;
     JsonDocument d; d["t"] = "tap"; sendJson(d);
   }
+  // TEMPORARY exhibition demo: while it is up, the built-in chase plays; the hub state is kept
+  // in `incoming` and shown again the moment the demo is switched off.
+  static bool wasDemo = false; static uint32_t nextMock = 0;
+  if (g_demoShow) {
+    if (!wasDemo) { wasDemo = true; nextMock = 0; }
+    if ((int32_t)(millis() - nextMock) >= 0) { nextMock = millis() + mockPoll(s); changed = true; }
+    return 5;
+  }
+  if (wasDemo) { wasDemo = false; pending = true; if (!incoming.teamA[0] && !incoming.status[0]) strcpy(incoming.status, "Waiting for the hub..."); }
   if (pending) {
     pending = false;
     uint32_t v = s.version; s = incoming; s.version = v;

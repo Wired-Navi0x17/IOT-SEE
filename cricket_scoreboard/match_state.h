@@ -11,6 +11,7 @@ struct MatchState {
   char format[8];          // "T20", "ODI", "TEST"
   char teamA[6], teamB[6]; // A = left, B = right; colours from ipl_teams.cpp
   uint32_t colA, colB;     // RGB888 chosen by the hub (0 = pick locally from the IPL table)
+  uint32_t rampA[3], rampB[3];   // beam ramp deep/bright/hot from the hub ("ka"/"kb"); all 0 = derive from colA/colB
   bool battingIsA;
   uint8_t innings;         // 1 or 2
   int16_t runs, wkts, balls, totalBalls, target;   // balls = legal balls bowled

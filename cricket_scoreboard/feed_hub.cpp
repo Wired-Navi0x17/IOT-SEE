@@ -56,7 +56,7 @@ void sendTelemetry() {
   JsonDocument d;
   d["t"] = "tm"; d["fps"] = roundf(g_fps * 10) / 10; d["heap"] = ESP.getFreeHeap(); d["maxblk"] = ESP.getMaxAllocHeap();
   d["rssi"] = WiFi.RSSI(); d["uptime"] = millis() / 1000; d["brightness"] = g_brightness; d["rot"] = g_rotation;
-  d["showing"] = showing; d["qr"] = (bool)g_qrShow;
+  d["showing"] = g_demoShow ? "DEMO" : showing; d["qr"] = (bool)g_qrShow;
   sendJson(d);
 }
 
@@ -70,7 +70,7 @@ void onCommand(JsonObjectConst o) {
   const char* name = o["name"] | "";
   JsonObjectConst a = o["args"];
   DeviceCmd c{Cmd::Ping, 0, id};
-  if (!strcmp(name, "demo")) { ack(id, true, "no demo: hub data only"); return; }   // legacy command
+  if (!strcmp(name, "demo")) { g_demoShow = a["on"] | false; ack(id, true, g_demoShow ? "demo on" : "demo off"); return; }
   if (!strcmp(name, "ping"))            { ack(id, true, "pong"); return; }
   if (!strcmp(name, "wifi_add")) {
     bool ok = wifiAdd(a["ssid"] | "", a["pass"] | "");
@@ -175,6 +175,15 @@ uint32_t feedPoll(MatchState& s, bool& changed) {
       if (connected) { JsonDocument d; d["t"] = "tap"; sendJson(d); }
     }
   }
+  // TEMPORARY exhibition demo: while it is up, the built-in chase plays; the hub state is kept
+  // in `incoming` and shown again the moment the demo is switched off.
+  static bool wasDemo = false; static uint32_t nextMock = 0;
+  if (g_demoShow) {
+    if (!wasDemo) { wasDemo = true; nextMock = 0; }
+    if ((int32_t)(millis() - nextMock) >= 0) { nextMock = millis() + mockPoll(s); changed = true; }
+    return 5;
+  }
+  if (wasDemo) { wasDemo = false; pendingState = true; if (!incoming.teamA[0] && !incoming.status[0]) strcpy(incoming.status, "Waiting for the hub..."); }
   if (pendingState) {
     pendingState = false;
     uint32_t v = s.version;

@@ -38,8 +38,9 @@ def to_device(st: dict) -> dict:
         return {"n": short_name(b.get("name", "")), "r": b.get("runs", 0), "b": b.get("balls", 0)}
     bw = st.get("bowler") or {}
     ca, cb = ipl.pair_colors(st["teamA"].get("short") or st["teamA"].get("name"), st["teamB"].get("short") or st["teamB"].get("name"))
+    ka, kb = ipl.ramps(st["teamA"].get("short") or st["teamA"].get("name"), st["teamB"].get("short") or st["teamB"].get("name"))
     return {
-        "ca": ca[1:], "cb": cb[1:],
+        "ca": ca[1:], "cb": cb[1:], "ka": ka, "kb": kb,
         "t": "state", "series": (st.get("series") or "")[:47].upper(), "format": st.get("format", "T20")[:7],
         "a": st["teamA"]["short"][:5], "b": st["teamB"]["short"][:5], "batA": st["battingIsA"],
         "inn": st["innings"], "r": st["runs"], "w": st["wkts"], "bl": st["balls"], "tb": st["totalBalls"],

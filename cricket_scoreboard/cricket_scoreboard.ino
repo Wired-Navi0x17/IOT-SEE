@@ -54,7 +54,7 @@ static void drawQrScreen() {
   lcd.drawString("Scan to", tx, y + 22); lcd.drawString("predict", tx, y + 44); lcd.drawString("the next", tx, y + 66); lcd.drawString("ball", tx, y + 88);
   lcd.setFont(&ft::label); lcd.setTextColor(0x8A86A0u);
   lcd.drawString("WIFI", tx, y + 124);
-  lcd.setTextColor(0xF2F0F7u); lcd.drawString("SEEv2-Cricket", tx, y + 138);
+  lcd.setTextColor(0xF2F0F7u); lcd.drawString("UCIS-Cricket", tx, y + 138);
   lcd.setTextColor(0x8A86A0u); lcd.drawString("PASS", tx, y + 158);
   lcd.setTextColor(0xF2F0F7u); lcd.drawString("cricket2026", tx, y + 172);
   lcd.setTextColor(0x8A86A0u); lcd.drawString("Tap to close", tx, y + side - 12);
@@ -74,11 +74,19 @@ static void pollTouch() {
   bool now = lcd.getTouch(&tx, &ty) > 0;
   uint32_t t = millis();
   if (now && !down) { down = true; since = t; longDone = false; }
+#if EXHIBITION_DEMO
+  else if (now && down && !longDone && t - since >= 1200) { longDone = true; if (g_qrShow) setQr(false); g_demoShow = !g_demoShow; }
+#else
   else if (now && down && !longDone && t - since >= 1200) { longDone = true; setQr(!g_qrShow); }
+#endif
   else if (!now && down) {
     down = false;
     if (!longDone && t - since >= 40) {
+#if EXHIBITION_DEMO
+      if (g_qrShow) setQr(false); else g_demoShow = !g_demoShow;   // TEMPORARY: demo scoreboard
+#else
       if (g_qrShow) setQr(false); else g_tapPending = true;
+#endif
     }
   }
 }
@@ -184,6 +192,7 @@ void loop() {
     float pBat = winProbBatting(s);
     liquidSetTarget(s.battingIsA ? pBat : 1.0f - pBat);
     if (s.colA && s.colB) teamColorsSet(s.colA, s.colB); else teamColorsApply(s.teamA, s.teamB);
+    teamRampsSet(s.rampA, s.rampB);
     liquidSetLabels(s.teamA[0] ? s.teamA : "--", s.teamB[0] ? s.teamB : "--", s.ended ? s.status : nullptr);
     if (s.eventSeq != lastSeq) { liquidEvent(s.lastEvent, s.battingIsA); lastSeq = s.eventSeq; }
     uiDrawBody(s);
