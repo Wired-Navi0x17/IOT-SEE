@@ -1,0 +1,146 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0E0B08;--ink:#F3E9D6;--dim:#9C8E78;--amber:#FFB238;--flood:#FFE9B0;--line:#3A3026;--live:#FF4B3E}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;background:var(--bg);color:var(--ink);font-family:"JetBrains Mono",monospace;overflow:hidden}
+@page{size:1080px 1920px;margin:0}
+.p{position:relative;width:1080px;height:1920px;padding:60px 72px 50px}
+.glow{position:absolute;inset:0;background:radial-gradient(ellipse 620px 360px at 50% 470px,#ffb23826,transparent 70%);pointer-events:none}
+.kicker{font-size:20px;letter-spacing:.32em;color:var(--dim);text-transform:uppercase}
+.kicker b{color:var(--live);font-weight:600}
+pre{font-family:"JetBrains Mono","DejaVu Sans Mono",monospace;white-space:pre}
+.title{font-size:29px;line-height:1.02;color:var(--amber);margin:20px 0 16px;text-shadow:0 0 18px #ffb23866}
+h1{font-family:"Big Shoulders Display";font-weight:700;font-size:56px;line-height:1.02;letter-spacing:.005em;max-width:960px}
+h1 em{font-style:normal;color:var(--amber)}
+.hero{display:grid;grid-template-columns:520px 1fr;gap:32px;margin-top:30px;align-items:end}
+.stumps{font-size:14.6px;line-height:13.6px;color:var(--flood);text-shadow:0 0 10px #ffd27a55}
+.score{border:1px solid var(--line);padding:22px 24px;background:#16110c}
+.score .tag{font-size:15px;letter-spacing:.2em;color:var(--dim);display:flex;gap:10px;align-items:center}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--live);box-shadow:0 0 10px var(--live)}
+.score .big{font-family:"Big Shoulders Display";font-weight:900;font-size:92px;line-height:1;margin:12px 0 4px;color:var(--flood)}
+.score .sub{font-size:17px;color:var(--dim)}
+.score hr{border:0;border-top:1px dashed var(--line);margin:18px 0}
+.score .s2{font-size:15px;letter-spacing:.2em;color:var(--dim)}
+.score .s2 b{color:var(--amber);font-weight:600}
+.rule{border-top:1px solid var(--line);margin:28px 0 20px}
+h2{font-family:"Big Shoulders Display";font-weight:700;font-size:34px;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);margin-bottom:18px}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line)}
+.node{padding:18px 16px 20px;border-right:1px solid var(--line);position:relative}
+.node:last-child{border-right:0}
+.node .n{font-size:14px;color:var(--dim);letter-spacing:.18em}
+.node h3{font-family:"Big Shoulders Display";font-size:30px;font-weight:700;margin:6px 0 8px}
+.node p{font-size:15.5px;line-height:1.45;color:#CDBFA6}
+.node:not(:last-child)::after{content:"▶";position:absolute;right:-9px;top:50%;font-size:14px;color:var(--amber);background:var(--bg);line-height:1}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.two p,.list li{font-size:17px;line-height:1.5;color:#D9CCB4}
+.two p b{color:var(--ink);font-weight:600}
+.cyd{display:none;font-size:7.4px;line-height:7.6px;color:var(--amber);opacity:.85;margin-top:14px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.chip{font-size:15px;font-weight:600;padding:6px 10px;border:1px solid var(--c);color:var(--c);letter-spacing:.06em}
+.list{list-style:none}
+.list li{padding:4px 0;border-bottom:1px dashed var(--line);display:flex;justify-content:space-between;gap:16px}
+.list li span{color:var(--dim);font-size:15px;white-space:nowrap}
+.foot{margin-top:26px;display:flex;gap:30px;align-items:center;border-top:1px solid var(--line);padding-top:24px}
+.qr{background:var(--flood);padding:14px;width:150px;height:150px;flex:none}
+.qr svg{width:100%;height:100%;display:block}
+.foot .t{font-family:"Big Shoulders Display";font-size:40px;font-weight:700;line-height:1.05}
+.foot .t em{font-style:normal;color:var(--amber)}
+.foot p{font-size:17px;color:var(--dim);margin-top:10px;line-height:1.5}
+</style></head><body><div class="p"><div class="glow"></div>
+<div class="kicker"><b>●</b> IoT project · Arduino UNO Q + ESP32 CYD</div>
+<pre class="title">██╗   ██╗ ██████╗██╗███████╗
+██║   ██║██╔════╝██║██╔════╝
+██║   ██║██║     ██║███████╗
+██║   ██║██║     ██║╚════██║
+╚██████╔╝╚██████╗██║███████║
+ ╚═════╝  ╚═════╝╚═╝╚══════╝</pre>
+<h1>A cricket scoreboard box that runs <em>entirely on one Arduino</em>. No PC, no cloud server.</h1>
+<div class="hero">
+<pre class="stumps">                   ....................                   
+              ......,,,,,,,,,,,,,,,,,,......              
+           .....,,,,,::::::::::::::::,,,,,.....           
+         ....,,,,::::;;;;;;iiii;;;;;;::::,,,,....         
+        ....,,,::::;;;iiii111111iiii;;;;:::,,,....        
+       ....,,,,:::;;;iii11tttttt11iii;;;;::,,,,....       
+       ....,,,,:::;;;iii1111tt1111iii;;;:::,,,,....       
+        ....,,,,::::;;;;iiiiiiiiii;;;;::::,,,,....        
+          ....,,,,,:::::;;;;;;;;;;:::::,,,,,....          
+            ......,,,,,,,::::::::,,,,,,,......            
+                ...    ............    ...                
+                   1LLLLLLLLLLLLLLLLLL1                   
+                   i@@0iiiiL@@CiiiiG@@1                   
+                   :8@C    1@@t    C@@;                   
+                   :8@C    t@@t    C@@;                   
+                   :8@C    t@@t    C@@;                   
+                   :8@C    t@@t    C@@;                   
+                   :8@C    t@@t    C@@;                   
+                   :8@C    t@@t    C@@;                   
+                   :8@C    t@@t    C@@;     ,::.          
+                   :8@C    t@@t    C@@;   10@@@8C:        
+                   :8@C    t@@t    C@@;  L@@@@@@@@;       
+                   :8@C    t@@t    C@@;  L@@@@@@@@;       
+                   :8@C    t@@t    C@@;  .f8@@@@Gi        
+                   :8@C    t@@t    C@@;    .:;;,          
+                   :8@C    t@@t    C@@;                   
+                   :8@C    t@@t    C@@;                   
+                   :8@C    t@@t    C@@;                   
+                   :8@C    t@@t    C@@;                   
+                   :8@C    t@@t    C@@;                   
+                   :8@C    t@@t    C@@;                   
+                   :8@C    t@@t    C@@;                   
+                   :@@G    t@@t    C@@;                   
+...................:G0f....iGG1....f0G;...................
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</pre>
+<div>
+<div class="score"><div class="tag"><span class="dot"></span>SCREEN 1 · LIVE</div>
+<div class="big">333/10</div><div class="sub">NZ v IND · ODI · 50.0 ov<br>Live from the CricketData API</div>
+<hr><div class="s2">SCREEN 2 · <b>SIM</b></div><div class="sub" style="margin-top:8px">Your teams, your batting order, simulated ball by ball</div></div>
+</div></div>
+<div class="rule"></div>
+<h2>How the score travels</h2>
+<div class="flow">
+<div class="node"><div class="n">01 · DATA</div><h3>CricketData API</h3><p>Live scores, polled every 2½ min to stay inside 100 free calls a day.</p></div>
+<div class="node"><div class="n">02 · BRAIN</div><h3>UNO Q hub</h3><p>Python hub in Docker on the board's Linux side. Stores matches, runs the simulator.</p></div>
+<div class="node"><div class="n">03 · LINK</div><h3>UART wire</h3><p>UNO Q MCU relays JSON to the screen at 115200 baud over 3 wires.</p></div>
+<div class="node"><div class="n">04 · SCREEN</div><h3>CYD display</h3><p>ESP32 2.8″ touch screen. Tap to switch screens, hold for the QR code.</p></div>
+</div>
+<div class="rule"></div>
+<div class="two">
+<div><h2>Run it from a phone</h2>
+<p>The UNO Q hosts its own WiFi, <b>UCIS-Cricket</b>. Open the dashboard to pick the screen, set up a simulation with two teams, their batting order and bowlers, then pause, resume or speed it up. Brightness, rotation and the QR code are controlled from there too.</p>
+<div class="chips"><span class="chip" style="--c:#F9CD05">CSK</span><span class="chip" style="--c:#2F6FE0">DC</span><span class="chip" style="--c:#6F8FD4">GT</span><span class="chip" style="--c:#9B5CF0">KKR</span><span class="chip" style="--c:#2EA8E6">LSG</span><span class="chip" style="--c:#1F7FE8">MI</span><span class="chip" style="--c:#E5323B">PBKS</span><span class="chip" style="--c:#EA1A85">RR</span><span class="chip" style="--c:#D9262C">RCB</span><span class="chip" style="--c:#F7752A">SRH</span></div>
+<pre class="cyd">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠨⣿⣿⣿⡿⣿⣽⣿⡧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄⣀⣀⣠⣠⣤⣤⠀⢀⣀⣠⣤⣤⣦⣤⣤⣤⣰⣶⣦⣤⣄⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠭⣭⣭⣽⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠘⠛⠾⠓⠾⠿⠃⠀⠀⢀⣠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣶⣶⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣶⣄⣤⣤⣤⠤⣤⣤⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⣿⣿⣿⣿⣿⣿⣿⣟⣛⣿⣿⠠⢹⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⣼⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⠰⢸⣿⣿⣿⣿⣿⣿⡃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢨⣿⠀⠀⢀⠿⠿⠿⣿⣿⣿⣿⣿⣿⣿⡿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⡭⠀⠀⢸⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⡇⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⣿⠀⠀⢸⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⡇⣿⣿⣿⠀⠀⢸⣿⣿⣿⣶⣿⣿⣿⣿⣿⣿⣿⡟⠛⣿⣿⢿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠰⣿⠀⠀⢸⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⡇⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣾⣿⣿⣿⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⣛⠀⠀⠀⣤⣤⣬⣿⣿⣿⣿⣿⣿⣿⣧⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣋⣉⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠘⠓⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⣸⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⠉⢹⣿⣿⣿⣿⣿⠛⠛⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⣿⣿⣿⣿⣿⣿⣿⣶⣾⣿⣿⣿⣿⣿⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣾⣿⣿⣿⣿⣿⠿⢠⡄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠒⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠷⠐⠛⠛⠓⠒⠚⠓⠒⠒⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠴⠶⠶⡶⠆⠀⠀⠀⠀⠀⠹⣿⣿⣿⣿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢿⢿⠿⠿⠟⠛⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠈⠉⠉⠀⠀⠁⠿⠿⠿⠿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</pre></div>
+<div><h2>What comes next</h2>
+<ul class="list">
+<li>Simulator and what-if engine in Rust <span>speed</span></li>
+<li>Player rating cards from IPL ball-by-ball data <span>Cricsheet</span></li>
+<li>What-if replays of real matches <span>replay</span></li>
+<li>Crowd prediction game on a /play page <span>game</span></li>
+<li>LED matrix flashes on a 4, a 6 or a wicket <span>UNO Q MCU</span></li>
+<li>Android app <span>Tauri 2</span></li>
+<li>Wireless link between the screen and the box <span>last</span></li>
+</ul></div>
+</div>
+<div class="foot"><div class="qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" shape-rendering="crispEdges"><g fill="#0E0B08"><rect x="0" y="0" width="1.02" height="1.02"/><rect x="1" y="0" width="1.02" height="1.02"/><rect x="2" y="0" width="1.02" height="1.02"/><rect x="3" y="0" width="1.02" height="1.02"/><rect x="4" y="0" width="1.02" height="1.02"/><rect x="5" y="0" width="1.02" height="1.02"/><rect x="6" y="0" width="1.02" height="1.02"/><rect x="9" y="0" width="1.02" height="1.02"/><rect x="10" y="0" width="1.02" height="1.02"/><rect x="11" y="0" width="1.02" height="1.02"/><rect x="12" y="0" width="1.02" height="1.02"/><rect x="13" y="0" width="1.02" height="1.02"/><rect x="15" y="0" width="1.02" height="1.02"/><rect x="16" y="0" width="1.02" height="1.02"/><rect x="18" y="0" width="1.02" height="1.02"/><rect x="19" y="0" width="1.02" height="1.02"/><rect x="20" y="0" width="1.02" height="1.02"/><rect x="21" y="0" width="1.02" height="1.02"/><rect x="22" y="0" width="1.02" height="1.02"/><rect x="23" y="0" width="1.02" height="1.02"/><rect x="24" y="0" width="1.02" height="1.02"/><rect x="0" y="1" width="1.02" height="1.02"/><rect x="6" y="1" width="1.02" height="1.02"/><rect x="8" y="1" width="1.02" height="1.02"/><rect x="13" y="1" width="1.02" height="1.02"/><rect x="15" y="1" width="1.02" height="1.02"/><rect x="18" y="1" width="1.02" height="1.02"/><rect x="24" y="1" width="1.02" height="1.02"/><rect x="0" y="2" width="1.02" height="1.02"/><rect x="2" y="2" width="1.02" height="1.02"/><rect x="3" y="2" width="1.02" height="1.02"/><rect x="4" y="2" width="1.02" height="1.02"/><rect x="6" y="2" width="1.02" height="1.02"/><rect x="9" y="2" width="1.02" height="1.02"/><rect x="12" y="2" width="1.02" height="1.02"/><rect x="14" y="2" width="1.02" height="1.02"/><rect x="15" y="2" width="1.02" height="1.02"/><rect x="16" y="2" width="1.02" height="1.02"/><rect x="18" y="2" width="1.02" height="1.02"/><rect x="20" y="2" width="1.02" height="1.02"/><rect x="21" y="2" width="1.02" height="1.02"/><rect x="22" y="2" width="1.02" height="1.02"/><rect x="24" y="2" width="1.02" height="1.02"/><rect x="0" y="3" width="1.02" height="1.02"/><rect x="2" y="3" width="1.02" height="1.02"/><rect x="3" y="3" width="1.02" height="1.02"/><rect x="4" y="3" width="1.02" height="1.02"/><rect x="6" y="3" width="1.02" height="1.02"/><rect x="10" y="3" width="1.02" height="1.02"/><rect x="12" y="3" width="1.02" height="1.02"/><rect x="16" y="3" width="1.02" height="1.02"/><rect x="18" y="3" width="1.02" height="1.02"/><rect x="20" y="3" width="1.02" height="1.02"/><rect x="21" y="3" width="1.02" height="1.02"/><rect x="22" y="3" width="1.02" height="1.02"/><rect x="24" y="3" width="1.02" height="1.02"/><rect x="0" y="4" width="1.02" height="1.02"/><rect x="2" y="4" width="1.02" height="1.02"/><rect x="3" y="4" width="1.02" height="1.02"/><rect x="4" y="4" width="1.02" height="1.02"/><rect x="6" y="4" width="1.02" height="1.02"/><rect x="8" y="4" width="1.02" height="1.02"/><rect x="10" y="4" width="1.02" height="1.02"/><rect x="11" y="4" width="1.02" height="1.02"/><rect x="12" y="4" width="1.02" height="1.02"/><rect x="15" y="4" width="1.02" height="1.02"/><rect x="16" y="4" width="1.02" height="1.02"/><rect x="18" y="4" width="1.02" height="1.02"/><rect x="20" y="4" width="1.02" height="1.02"/><rect x="21" y="4" width="1.02" height="1.02"/><rect x="22" y="4" width="1.02" height="1.02"/><rect x="24" y="4" width="1.02" height="1.02"/><rect x="0" y="5" width="1.02" height="1.02"/><rect x="6" y="5" width="1.02" height="1.02"/><rect x="13" y="5" width="1.02" height="1.02"/><rect x="15" y="5" width="1.02" height="1.02"/><rect x="16" y="5" width="1.02" height="1.02"/><rect x="18" y="5" width="1.02" height="1.02"/><rect x="24" y="5" width="1.02" height="1.02"/><rect x="0" y="6" width="1.02" height="1.02"/><rect x="1" y="6" width="1.02" height="1.02"/><rect x="2" y="6" width="1.02" height="1.02"/><rect x="3" y="6" width="1.02" height="1.02"/><rect x="4" y="6" width="1.02" height="1.02"/><rect x="5" y="6" width="1.02" height="1.02"/><rect x="6" y="6" width="1.02" height="1.02"/><rect x="8" y="6" width="1.02" height="1.02"/><rect x="10" y="6" width="1.02" height="1.02"/><rect x="12" y="6" width="1.02" height="1.02"/><rect x="14" y="6" width="1.02" height="1.02"/><rect x="16" y="6" width="1.02" height="1.02"/><rect x="18" y="6" width="1.02" height="1.02"/><rect x="19" y="6" width="1.02" height="1.02"/><rect x="20" y="6" width="1.02" height="1.02"/><rect x="21" y="6" width="1.02" height="1.02"/><rect x="22" y="6" width="1.02" height="1.02"/><rect x="23" y="6" width="1.02" height="1.02"/><rect x="24" y="6" width="1.02" height="1.02"/><rect x="9" y="7" width="1.02" height="1.02"/><rect x="13" y="7" width="1.02" height="1.02"/><rect x="15" y="7" width="1.02" height="1.02"/><rect x="0" y="8" width="1.02" height="1.02"/><rect x="2" y="8" width="1.02" height="1.02"/><rect x="4" y="8" width="1.02" height="1.02"/><rect x="6" y="8" width="1.02" height="1.02"/><rect x="10" y="8" width="1.02" height="1.02"/><rect x="11" y="8" width="1.02" height="1.02"/><rect x="12" y="8" width="1.02" height="1.02"/><rect x="13" y="8" width="1.02" height="1.02"/><rect x="14" y="8" width="1.02" height="1.02"/><rect x="20" y="8" width="1.02" height="1.02"/><rect x="23" y="8" width="1.02" height="1.02"/><rect x="0" y="9" width="1.02" height="1.02"/><rect x="4" y="9" width="1.02" height="1.02"/><rect x="9" y="9" width="1.02" height="1.02"/><rect x="11" y="9" width="1.02" height="1.02"/><rect x="12" y="9" width="1.02" height="1.02"/><rect x="13" y="9" width="1.02" height="1.02"/><rect x="14" y="9" width="1.02" height="1.02"/><rect x="17" y="9" width="1.02" height="1.02"/><rect x="18" y="9" width="1.02" height="1.02"/><rect x="19" y="9" width="1.02" height="1.02"/><rect x="24" y="9" width="1.02" height="1.02"/><rect x="0" y="10" width="1.02" height="1.02"/><rect x="1" y="10" width="1.02" height="1.02"/><rect x="3" y="10" width="1.02" height="1.02"/><rect x="6" y="10" width="1.02" height="1.02"/><rect x="8" y="10" width="1.02" height="1.02"/><rect x="12" y="10" width="1.02" height="1.02"/><rect x="14" y="10" width="1.02" height="1.02"/><rect x="16" y="10" width="1.02" height="1.02"/><rect x="17" y="10" width="1.02" height="1.02"/><rect x="20" y="10" width="1.02" height="1.02"/><rect x="22" y="10" width="1.02" height="1.02"/><rect x="23" y="10" width="1.02" height="1.02"/><rect x="24" y="10" width="1.02" height="1.02"/><rect x="0" y="11" width="1.02" height="1.02"/><rect x="3" y="11" width="1.02" height="1.02"/><rect x="4" y="11" width="1.02" height="1.02"/><rect x="5" y="11" width="1.02" height="1.02"/><rect x="9" y="11" width="1.02" height="1.02"/><rect x="11" y="11" width="1.02" height="1.02"/><rect x="12" y="11" width="1.02" height="1.02"/><rect x="13" y="11" width="1.02" height="1.02"/><rect x="16" y="11" width="1.02" height="1.02"/><rect x="17" y="11" width="1.02" height="1.02"/><rect x="18" y="11" width="1.02" height="1.02"/><rect x="19" y="11" width="1.02" height="1.02"/><rect x="23" y="11" width="1.02" height="1.02"/><rect x="2" y="12" width="1.02" height="1.02"/><rect x="6" y="12" width="1.02" height="1.02"/><rect x="7" y="12" width="1.02" height="1.02"/><rect x="8" y="12" width="1.02" height="1.02"/><rect x="10" y="12" width="1.02" height="1.02"/><rect x="12" y="12" width="1.02" height="1.02"/><rect x="13" y="12" width="1.02" height="1.02"/><rect x="14" y="12" width="1.02" height="1.02"/><rect x="15" y="12" width="1.02" height="1.02"/><rect x="16" y="12" width="1.02" height="1.02"/><rect x="18" y="12" width="1.02" height="1.02"/><rect x="19" y="12" width="1.02" height="1.02"/><rect x="21" y="12" width="1.02" height="1.02"/><rect x="23" y="12" width="1.02" height="1.02"/><rect x="24" y="12" width="1.02" height="1.02"/><rect x="2" y="13" width="1.02" height="1.02"/><rect x="3" y="13" width="1.02" height="1.02"/><rect x="4" y="13" width="1.02" height="1.02"/><rect x="5" y="13" width="1.02" height="1.02"/><rect x="9" y="13" width="1.02" height="1.02"/><rect x="11" y="13" width="1.02" height="1.02"/><rect x="12" y="13" width="1.02" height="1.02"/><rect x="13" y="13" width="1.02" height="1.02"/><rect x="14" y="13" width="1.02" height="1.02"/><rect x="18" y="13" width="1.02" height="1.02"/><rect x="19" y="13" width="1.02" height="1.02"/><rect x="21" y="13" width="1.02" height="1.02"/><rect x="24" y="13" width="1.02" height="1.02"/><rect x="0" y="14" width="1.02" height="1.02"/><rect x="4" y="14" width="1.02" height="1.02"/><rect x="6" y="14" width="1.02" height="1.02"/><rect x="7" y="14" width="1.02" height="1.02"/><rect x="8" y="14" width="1.02" height="1.02"/><rect x="9" y="14" width="1.02" height="1.02"/><rect x="11" y="14" width="1.02" height="1.02"/><rect x="12" y="14" width="1.02" height="1.02"/><rect x="14" y="14" width="1.02" height="1.02"/><rect x="16" y="14" width="1.02" height="1.02"/><rect x="17" y="14" width="1.02" height="1.02"/><rect x="18" y="14" width="1.02" height="1.02"/><rect x="19" y="14" width="1.02" height="1.02"/><rect x="20" y="14" width="1.02" height="1.02"/><rect x="22" y="14" width="1.02" height="1.02"/><rect x="23" y="14" width="1.02" height="1.02"/><rect x="24" y="14" width="1.02" height="1.02"/><rect x="1" y="15" width="1.02" height="1.02"/><rect x="2" y="15" width="1.02" height="1.02"/><rect x="4" y="15" width="1.02" height="1.02"/><rect x="12" y="15" width="1.02" height="1.02"/><rect x="13" y="15" width="1.02" height="1.02"/><rect x="15" y="15" width="1.02" height="1.02"/><rect x="17" y="15" width="1.02" height="1.02"/><rect x="19" y="15" width="1.02" height="1.02"/><rect x="21" y="15" width="1.02" height="1.02"/><rect x="23" y="15" width="1.02" height="1.02"/><rect x="0" y="16" width="1.02" height="1.02"/><rect x="2" y="16" width="1.02" height="1.02"/><rect x="4" y="16" width="1.02" height="1.02"/><rect x="6" y="16" width="1.02" height="1.02"/><rect x="9" y="16" width="1.02" height="1.02"/><rect x="10" y="16" width="1.02" height="1.02"/><rect x="11" y="16" width="1.02" height="1.02"/><rect x="14" y="16" width="1.02" height="1.02"/><rect x="16" y="16" width="1.02" height="1.02"/><rect x="17" y="16" width="1.02" height="1.02"/><rect x="18" y="16" width="1.02" height="1.02"/><rect x="19" y="16" width="1.02" height="1.02"/><rect x="20" y="16" width="1.02" height="1.02"/><rect x="21" y="16" width="1.02" height="1.02"/><rect x="8" y="17" width="1.02" height="1.02"/><rect x="11" y="17" width="1.02" height="1.02"/><rect x="16" y="17" width="1.02" height="1.02"/><rect x="20" y="17" width="1.02" height="1.02"/><rect x="21" y="17" width="1.02" height="1.02"/><rect x="22" y="17" width="1.02" height="1.02"/><rect x="23" y="17" width="1.02" height="1.02"/><rect x="24" y="17" width="1.02" height="1.02"/><rect x="0" y="18" width="1.02" height="1.02"/><rect x="1" y="18" width="1.02" height="1.02"/><rect x="2" y="18" width="1.02" height="1.02"/><rect x="3" y="18" width="1.02" height="1.02"/><rect x="4" y="18" width="1.02" height="1.02"/><rect x="5" y="18" width="1.02" height="1.02"/><rect x="6" y="18" width="1.02" height="1.02"/><rect x="10" y="18" width="1.02" height="1.02"/><rect x="13" y="18" width="1.02" height="1.02"/><rect x="15" y="18" width="1.02" height="1.02"/><rect x="16" y="18" width="1.02" height="1.02"/><rect x="18" y="18" width="1.02" height="1.02"/><rect x="20" y="18" width="1.02" height="1.02"/><rect x="23" y="18" width="1.02" height="1.02"/><rect x="24" y="18" width="1.02" height="1.02"/><rect x="0" y="19" width="1.02" height="1.02"/><rect x="6" y="19" width="1.02" height="1.02"/><rect x="9" y="19" width="1.02" height="1.02"/><rect x="10" y="19" width="1.02" height="1.02"/><rect x="11" y="19" width="1.02" height="1.02"/><rect x="15" y="19" width="1.02" height="1.02"/><rect x="16" y="19" width="1.02" height="1.02"/><rect x="20" y="19" width="1.02" height="1.02"/><rect x="21" y="19" width="1.02" height="1.02"/><rect x="0" y="20" width="1.02" height="1.02"/><rect x="2" y="20" width="1.02" height="1.02"/><rect x="3" y="20" width="1.02" height="1.02"/><rect x="4" y="20" width="1.02" height="1.02"/><rect x="6" y="20" width="1.02" height="1.02"/><rect x="8" y="20" width="1.02" height="1.02"/><rect x="9" y="20" width="1.02" height="1.02"/><rect x="10" y="20" width="1.02" height="1.02"/><rect x="12" y="20" width="1.02" height="1.02"/><rect x="16" y="20" width="1.02" height="1.02"/><rect x="17" y="20" width="1.02" height="1.02"/><rect x="18" y="20" width="1.02" height="1.02"/><rect x="19" y="20" width="1.02" height="1.02"/><rect x="20" y="20" width="1.02" height="1.02"/><rect x="23" y="20" width="1.02" height="1.02"/><rect x="24" y="20" width="1.02" height="1.02"/><rect x="0" y="21" width="1.02" height="1.02"/><rect x="2" y="21" width="1.02" height="1.02"/><rect x="3" y="21" width="1.02" height="1.02"/><rect x="4" y="21" width="1.02" height="1.02"/><rect x="6" y="21" width="1.02" height="1.02"/><rect x="9" y="21" width="1.02" height="1.02"/><rect x="10" y="21" width="1.02" height="1.02"/><rect x="11" y="21" width="1.02" height="1.02"/><rect x="12" y="21" width="1.02" height="1.02"/><rect x="13" y="21" width="1.02" height="1.02"/><rect x="15" y="21" width="1.02" height="1.02"/><rect x="16" y="21" width="1.02" height="1.02"/><rect x="17" y="21" width="1.02" height="1.02"/><rect x="20" y="21" width="1.02" height="1.02"/><rect x="22" y="21" width="1.02" height="1.02"/><rect x="0" y="22" width="1.02" height="1.02"/><rect x="2" y="22" width="1.02" height="1.02"/><rect x="3" y="22" width="1.02" height="1.02"/><rect x="4" y="22" width="1.02" height="1.02"/><rect x="6" y="22" width="1.02" height="1.02"/><rect x="8" y="22" width="1.02" height="1.02"/><rect x="9" y="22" width="1.02" height="1.02"/><rect x="10" y="22" width="1.02" height="1.02"/><rect x="11" y="22" width="1.02" height="1.02"/><rect x="12" y="22" width="1.02" height="1.02"/><rect x="14" y="22" width="1.02" height="1.02"/><rect x="15" y="22" width="1.02" height="1.02"/><rect x="17" y="22" width="1.02" height="1.02"/><rect x="20" y="22" width="1.02" height="1.02"/><rect x="21" y="22" width="1.02" height="1.02"/><rect x="24" y="22" width="1.02" height="1.02"/><rect x="0" y="23" width="1.02" height="1.02"/><rect x="6" y="23" width="1.02" height="1.02"/><rect x="12" y="23" width="1.02" height="1.02"/><rect x="13" y="23" width="1.02" height="1.02"/><rect x="14" y="23" width="1.02" height="1.02"/><rect x="15" y="23" width="1.02" height="1.02"/><rect x="16" y="23" width="1.02" height="1.02"/><rect x="17" y="23" width="1.02" height="1.02"/><rect x="20" y="23" width="1.02" height="1.02"/><rect x="21" y="23" width="1.02" height="1.02"/><rect x="23" y="23" width="1.02" height="1.02"/><rect x="0" y="24" width="1.02" height="1.02"/><rect x="1" y="24" width="1.02" height="1.02"/><rect x="2" y="24" width="1.02" height="1.02"/><rect x="3" y="24" width="1.02" height="1.02"/><rect x="4" y="24" width="1.02" height="1.02"/><rect x="5" y="24" width="1.02" height="1.02"/><rect x="6" y="24" width="1.02" height="1.02"/><rect x="8" y="24" width="1.02" height="1.02"/><rect x="9" y="24" width="1.02" height="1.02"/><rect x="10" y="24" width="1.02" height="1.02"/><rect x="11" y="24" width="1.02" height="1.02"/><rect x="14" y="24" width="1.02" height="1.02"/><rect x="16" y="24" width="1.02" height="1.02"/><rect x="19" y="24" width="1.02" height="1.02"/><rect x="23" y="24" width="1.02" height="1.02"/><rect x="24" y="24" width="1.02" height="1.02"/></g></svg></div>
+<div><div class="t">Join <em>UCIS-Cricket</em>,<br>then scan to open the dashboard.</div>
+<p>10.42.0.1:8000 · source code: github.com/Wired-Navi0x17/IOT-SEE</p></div></div>
+</div></body></html>
