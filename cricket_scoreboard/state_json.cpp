@@ -42,6 +42,7 @@ void parseStateJson(JsonObjectConst o, MatchState& out) {
   }
   copyStr(n.status, sizeof n.status, o["status"]);
   n.live = o["live"] | false; n.ended = o["ended"] | false; n.hasPlayers = o["hp"] | false;
+  n.sim = o["sim"] | false;
   n.lastEvent = evFrom(o["ev"] | "none"); n.eventSeq = o["es"] | 0;
   out = n;
 }

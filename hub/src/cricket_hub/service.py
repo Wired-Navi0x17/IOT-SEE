@@ -124,12 +124,12 @@ class Hub:
                 return m, "SIMULATION: set it up on the dashboard"
             live = s.exec(select(Match).where(Match.source.in_(["api", "local"]), Match.status == "live")
                           .order_by(Match.updated_at.desc())).first()
-            if live is not None and (live.source == "local" or ipl.is_ipl(live.team_a_name)):
+            if live is not None and (live.source == "local" or ipl.in_scope(live.team_a_name, live.team_b_name)):
                 return live, ""
             nxt = s.exec(select(Match).where(Match.status == "scheduled", Match.source.in_(["api", "local"]),
                                              Match.scheduled_at.is_not(None))
                          .order_by(Match.scheduled_at)).first()
-        msg = "No live IPL match"
+        msg = "No live IPL match" if ipl.live_scope() == "ipl" else "No live match"
         if nxt is not None:
             msg += f". Next: {nxt.team_a_short} v {nxt.team_b_short} {nxt.scheduled_at:%d %b %H:%M}"
         return None, msg
@@ -141,7 +141,7 @@ class Hub:
                 "a": "", "b": "", "ca": "", "cb": "", "batA": True, "inn": 1, "r": 0, "w": 0, "bl": 0, "tb": 120,
                 "tgt": 0, "st": {"n": "", "r": 0, "b": 0}, "ns": {"n": "", "r": 0, "b": 0},
                 "bw": {"n": "", "b": 0, "m": 0, "r": 0, "w": 0}, "nb": "", "nw": "", "ov": [],
-                "status": message[:63], "live": False, "ended": False, "hp": False, "ev": "none", "es": 0}
+                "status": message[:63], "live": False, "sim": screen == "sim", "ended": False, "hp": False, "ev": "none", "es": 0}
 
     async def push_display(self, force: bool = False) -> None:
         if self.device is None:
@@ -150,8 +150,11 @@ class Hub:
         m, msg = self._display_match()
         if m is not None and m.state:
             payload = to_device(m.state)
-            if screen == "sim" and not payload["series"]:
-                payload["series"] = "SIMULATION"
+            if screen == "sim" or m.source == "sim":
+                # Screen 2 is a simulation, never live: the CYD must not show the LIVE tag for it.
+                payload["live"], payload["sim"] = False, True
+                if not payload["series"]:
+                    payload["series"] = "SIMULATION"
         else:
             payload = self.idle_payload(screen, msg or "Waiting for match data")
         if not force and payload == self.last_pushed:

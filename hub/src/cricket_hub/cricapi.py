@@ -138,8 +138,8 @@ async def poll_once(client: httpx.AsyncClient) -> list[int]:
             if not api_id:
                 continue
             teams = m.get("teams") or []
-            if len(teams) < 2 or not all(ipl.is_ipl(t) for t in teams[:2]):
-                continue                                  # IPL only: skip every other fixture
+            if len(teams) < 2 or not ipl.in_scope(*teams[:2]):
+                continue                                  # IPL only unless LIVE_SCOPE=all
             row = s.exec(select(Match).where(Match.api_id == api_id)).first()
             prev = row.state if row else None
             st = normalise(m, prev)

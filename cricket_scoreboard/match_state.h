@@ -20,6 +20,7 @@ struct MatchState {
   char thisOver[8][4]; uint8_t nThisOver;          // ".", "1", "4", "W", "Wd"...
   char status[64];
   bool live, ended, hasPlayers;
+  bool sim;                                         // Screen 2: a simulation, never shown as LIVE
   MatchEvent lastEvent; uint32_t eventSeq;
   uint32_t version;
 };

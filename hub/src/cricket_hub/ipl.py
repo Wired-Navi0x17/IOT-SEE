@@ -64,3 +64,13 @@ def pair_colors(a: str | None, b: str | None) -> tuple[str, str]:
     if distance(col_a, prim) >= CLASH:
         return col_a, prim
     return col_a, alt if distance(col_a, alt) >= distance(col_a, prim) else prim
+
+
+def live_scope() -> str:
+    """LIVE_SCOPE=ipl (default) keeps Screen 1 to IPL games; LIVE_SCOPE=all also shows internationals such as IND v NZ."""
+    import os
+    return "all" if os.environ.get("LIVE_SCOPE", "ipl").strip().lower() == "all" else "ipl"
+
+
+def in_scope(*names: str | None) -> bool:
+    return live_scope() == "all" or all(is_ipl(n) for n in names)
